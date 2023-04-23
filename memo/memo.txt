@@ -24,6 +24,8 @@ junit : ??
 spring-test : 스프링과 통합해서 테스트하게 도와주는 라이브러리?
 assertj : 테스트 코드를 좀 더 편하게 작성하게 도와주는 lib
 
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 2023_04_03
 resources/static : 정적페이지
 ㄴ 요기에 index.html을 만들면 Welcome Page를 만들 수 있음
@@ -54,3 +56,69 @@ templates/hello.html을 찾아가서 렌더링 하라는 뜻
 
 <p th:text ="'안녕하세요. '+ ${data}"> 안녕하세요 손님.</p>
 에서 th는 타임리프 문법
+
+2023_04_23
+정적 컨텐츠 - spring에서는 웹브라우저 -> 내장 톰캣 서버
+에서 관련 컨트롤러가 있는지 확인하고 없다면 /static에서 찾아봄
+
+MVC의 템플릿 엔진 (모델 뷰 컨트롤러)
+ㄴ 모델 / 뷰 / 컨트롤러로 역할을 쪼개서 개발하는 방식
+
+api방식 - json이라는 데이터 구조 포멧으로 클라이언트에게 데이터를 전달하는 방식(요즘)
+ㄴ 정적 페이지만 아니면 보통 2가지
+- html로 내리느냐
+- api방식이라는 것으로 데이터를 바로 내리느냐(json)
+
+Model model - 뷰에 데이터를 전달하기 위해 사용되는 인터페이스
+컨트롤러에서 'Model' 객체를 파라미터로 선언하면, 해당 컨트롤러가 호출되어 실행될 때
+뷰에 전달할 데이터를 'Model'객체에 추가할 수 있다.
+= 즉! 'Model'객체는 뷰와 컨트롤러 사이에서 데이터를 전달하는데 사용되며, 컨트롤러 -> 뷰에 데이터를 전달할 때 주로 사용됨
+
+'''
+@GetMapping("hello-mvc")
+    public String helloMvc(@RequestParam("name")String name ,Model model) {
+        model.addAttribute("name", name);
+        return "hello-template";
+    }
+}
+'''
+
+'''
+@RequestParam("name")String name
+'''
+"name"이라는 매개 변수가 HTTP쵸엉에서 필요하다는 것을 나타냄.
+String name은 해당 매개 변수의 값을 받아들이는 변수
+
+@ResponseBody - http에서 헤더/바디 부분에서 바디부분에 data를 직접 넣어주겠다라는 의미
+
+'''
+@GetMapping("hello-string")
+    @ResponseBody
+    public String helloString(@RequestParam("name")String name) {
+        return "hello" + name;
+    }
+'''
+ㄴ 문자?를 직접 내려주는 방식
+
+'''
+@GetMapping("hello-api")
+    @ResponseBody
+    public Hello helloApi(@RequestParam("name")String name) {
+        Hello hello = new Hello();
+        hello.setName(name);
+        return hello;
+    }
+
+    static class Hello {
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+'''
+ㄴ ★ json형태로 데이터를 전달해줌 ★ key - value
+ㄴ json형태로 데이터를 전달해주는게 거의 default!!!
