@@ -58,7 +58,8 @@ templates/hello.html을 찾아가서 렌더링 하라는 뜻
 에서 th는 타임리프 문법
 
 2023_04_23
-정적 컨텐츠 - spring에서는 웹브라우저 -> 내장 톰캣 서버
+정적 컨텐츠 - 그냥 파일을 그대로 내려주는 것
+spring에서는 웹브라우저 -> 내장 톰캣 서버
 에서 관련 컨트롤러가 있는지 확인하고 없다면 /static에서 찾아봄
 
 MVC의 템플릿 엔진 (모델 뷰 컨트롤러)
@@ -86,7 +87,7 @@ Model model - 뷰에 데이터를 전달하기 위해 사용되는 인터페이�
 '''
 @RequestParam("name")String name
 '''
-"name"이라는 매개 변수가 HTTP쵸엉에서 필요하다는 것을 나타냄.
+"name"이라는 매개 변수가 HTTP요청에서 필요하다는 것을 나타냄.
 String name은 해당 매개 변수의 값을 받아들이는 변수
 
 @ResponseBody - http에서 헤더/바디 부분에서 바디부분에 data를 직접 넣어주겠다라는 의미
@@ -122,3 +123,40 @@ String name은 해당 매개 변수의 값을 받아들이는 변수
 '''
 ㄴ ★ json형태로 데이터를 전달해줌 ★ key - value
 ㄴ json형태로 데이터를 전달해주는게 거의 default!!!
+
+2023_04_24
+컨트롤러 : 웹 MVC의 컨트롤러 역할
+서비스 : 핵심 비즈니스 로직 구현
+리포지토리 : 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
+도메인 : 비즈니스 도메인 객체 ex)회원, 주문, 쿠폰 등등 DB에 저장하고 관리됨
+
+근데 패키지가 뭐지?? - 클래스, 인터페이스 등 논리적인 그룹을 나타는 데 사용됨. 중복가능, import문을 통해 다른 패키지의 클래스를 참조할 수 있음
+Optional?? - 자바 8에 추가된 기능으로 null 값을 처리하는 방법 중 하나, 값이 있을 수도 없을 수도 있는 객체를 감싸서 처리
+            null일 경우 - Optional.empty()를 반환
+
+'''
+public class MemoryMemberRepository implements MemberRepository{
+}
+'''
+에서 implements는 인터페이스를 구현하는 것. 인터페이스에서는 선언만 하고 정의(내용)은 하지않기때문
+
+메소드 OR 변수를 '구현'하는가 그대로 '사용'하는가에 따라서 상속의 형태가 갈리게 된다.
+
+1. extends
+부모에서 선언 / 정의를 모두하며 자식은 메소드 / 변수를 그대로 사용할 수 있음
+2. implements (interface 구현)
+부모 객체는 선언만 하며 정의(내용)은 자식에서 오버라이딩 (재정의) 해서 사용해야함
+3. abstract
+extends와 interface 혼합. extends하되 몇 개는 추상 메소드로 구현되어 있음
+
+Map 함수
+- Map은 자바 컬렉션 프레임워크의 인터페이스 중 하나입니다. Key와 Value로 구성된 데이터를 다루는 데 사용됩니다. - json?
+- Key-Value 쌍을 저장하며, Key는 중복이 불가능하고, Value는 중복이 가능합니다. 따라서, Key를 통해 Value에 접근할 수 있음
+ex)
+'''
+private static Map<Long, Member> store = new HashMap<>();
+'''
+실무에서는 동시성 문제가 있을 수 있어 공유되는 변수일 때는 HashMap 대신 ConcurrentHashMap를 사용
+
+동작을 하는지 안하는지 확인하기 위해 - "테스트 케이스"를 작성 -> TDD?
+TDD - 먼저 테스트 코드를 작성하고, 이를 통과시키는 코드를 작성하는 방식으로 개발을 진행
