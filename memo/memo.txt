@@ -101,7 +101,7 @@ String name은 해당 매개 변수의 값을 받아들이는 변수
 '''
 ㄴ 문자?를 직접 내려주는 방식
 
-'''
+```
 @GetMapping("hello-api")
     @ResponseBody
     public Hello helloApi(@RequestParam("name")String name) {
@@ -120,11 +120,11 @@ String name은 해당 매개 변수의 값을 받아들이는 변수
             this.name = name;
         }
     }
-'''
+```
 ㄴ ★ json형태로 데이터를 전달해줌 ★ key - value
 ㄴ json형태로 데이터를 전달해주는게 거의 default!!!
 
-2023_04_24
+2023_04_29
 컨트롤러 : 웹 MVC의 컨트롤러 역할
 서비스 : 핵심 비즈니스 로직 구현
 리포지토리 : 데이터베이스에 접근, 도메인 객체를 DB에 저장하고 관리
@@ -160,3 +160,47 @@ private static Map<Long, Member> store = new HashMap<>();
 
 동작을 하는지 안하는지 확인하기 위해 - "테스트 케이스"를 작성 -> TDD?
 TDD - 먼저 테스트 코드를 작성하고, 이를 통과시키는 코드를 작성하는 방식으로 개발을 진행
+
+2023_05_01
+```
+@Test
+    public void save() {
+        Member member = new Member();
+        member.setName("Spring");
+
+        repository.save(member);
+        Member result = repository.findById(member.getId()).get();
+        // Assertions.assertEquals의 매개변수에는 (기대하는 값, 실제 값)을 넣어서 실행
+        // 만약 성공했다면 값은 안나오지만 초록불 / 아니라면 빨간불과 함께 오류
+        Assertions.assertEquals(member, null);
+
+        // Assertions.assertThat은 매개변수의 순서가 중요하지않음.
+        // 그저 두개를 비교하고 성공과 실패를 판단
+        assertThat(member).isEqualTo(result);
+    }
+```
+테스트코드는 만들었던 함수를 따로 실행해 볼 수 있음
+테스트코드를 작성할 때는 반드시 @Test 어노테이션 추가!
+테스트하는 순서는 랜덤 - 순서에 의존적으로 설계하면 절대 안돼!!
+
+
+```
+MemoryMemberRepository repository = new MemoryMemberRepository();
+
+    @AfterEach
+    public void afterEach() {
+        repository.clearStore();
+    }
+```
+```
+// MemoryMemberRepository
+public void clearStore() {
+        store.clear();
+    }
+```
+findAll()이 실행되고 findByName()을 실행시켰을 때 findAll()에서 생성된 Spring1과 findByName()에서 생성된 Spring2는 서로 다른 객체이므로 오류.
+그래서 테스트가 하나 끝나고나면 꼭! 클리어를 해주어야 함
+@AfterEach 어노테이션은 각각의 테스트 메소드가 실행된 후에 실행되는 메소드를 나타냄
+
+TDD (테스트 주도 개발) - 테스트코드를 먼저 작성하고, 실제 코드를 구현하는 방식
+ㄴ 테스트코드를 먼저 작성하면 어떻게 실행시키지???
