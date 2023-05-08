@@ -1,5 +1,7 @@
 package spring.spring_basic.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import spring.spring_basic.domain.Member;
 import spring.spring_basic.repository.MemberRepository;
 import spring.spring_basic.repository.MemoryMemberRepository;
@@ -7,10 +9,12 @@ import spring.spring_basic.repository.MemoryMemberRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Autowired
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
