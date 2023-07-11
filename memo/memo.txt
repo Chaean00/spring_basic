@@ -308,3 +308,9 @@ SOLID 원칙 - 찾아볼것
 
 JdbcTemplate에 대해 공부
 다양한 어노테이션에 대해 공부
+
+2023.07.10
+jpa를 사용하기위해서는 EntityManger를 주입받아야한다
+'''
+private final EntityManager em;
+'''

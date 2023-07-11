@@ -1,7 +1,13 @@
 package spring.spring_basic.domain;
 
+import org.hibernate.annotations.GeneratorType;
+
+import javax.persistence.*;
+
+@Entity
 public class Member {
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
