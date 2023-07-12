@@ -1,9 +1,11 @@
-package spring.spring_basic.service;
+package spring.spring_basic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import spring.spring_basic.aop.TimeTraceAop;
 import spring.spring_basic.repository.*;
+import spring.spring_basic.service.MemberService;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
@@ -23,6 +25,7 @@ public class SpringConfig {
     public MemberService memberService() {
         return new MemberService(memberRepository);
     }
+
 
 //    @Bean
 //    public MemberRepository memberRepository() {
